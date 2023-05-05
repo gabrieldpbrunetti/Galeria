@@ -1,7 +1,9 @@
 package brunetti.depaula.galeria;
 
 import android.graphics.Bitmap;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -11,11 +13,21 @@ import java.util.List;
 
 public class MainAdapter extends RecyclerView.Adapter {
     MainActivity mainActivity;
-    List<String> photos
+    List<String> photos;
 
     public MainAdapter(MainActivity mainActivity, List<String> photos){
         this.mainActivity = mainActivity;
+        this.photos = photos;
 
+    }
+
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(mainActivity);//Inicializa o LayoutInflater que recebe o mainActivity e infla os elementos em tempo de execução
+        View v = inflater.inflate(R.layout.list_tem,parent,false);//Inicializa os elementos view a partir do LayoutInflater que gerou os elementos View a partir do arquivo xml MainActivity
+        return new MyViewHolder(v);
     }
 
     @Override
@@ -31,5 +43,10 @@ public class MainAdapter extends RecyclerView.Adapter {
                 mainActivity.startPhotoActivity(photos.get(position));
             }
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return 0;
     }
 }
