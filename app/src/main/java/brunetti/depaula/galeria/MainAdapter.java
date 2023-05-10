@@ -32,7 +32,8 @@ public class MainAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position){
-        ImageView imPhoto = holder.itemView.findViewById(R.id.imItem);
+        View v = holder.itemView;
+        ImageView imPhoto = v.findViewById(R.id.imItem);
         int w = (int) mainActivity.getResources().getDimension(R.dimen.itemWidth);
         int h = (int) mainActivity.getResources().getDimension(R.dimen.itemHeight);
         Bitmap bitmap = Util.getBitmap(photos.get(position), w, h);
@@ -47,6 +48,6 @@ public class MainAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return photos.size();
     }
 }

@@ -1,7 +1,9 @@
 package brunetti.depaula.galeria;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import android.content.Intent;
@@ -20,6 +22,9 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        Toolbar toolbar = findViewById(R.id.tbPhoto);
+        setSupportActionBar(toolbar);
 
         Intent i = getIntent();
         photoPath = i.getStringExtra("photo_path");
