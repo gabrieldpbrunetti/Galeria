@@ -43,12 +43,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //cria o layout de main activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //inicializa o array de permissoes
         List<String> permissions = new ArrayList<>();
+        //adiciona a permissao de acessar a camera
         permissions.add(Manifest.permission.CAMERA);
 
+        //checa pelas permissoes
         checkForPermissions(permissions);
 
         Toolbar toolbar = findViewById(R.id.tbMain);
