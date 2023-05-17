@@ -55,22 +55,27 @@ public class MainActivity extends AppCompatActivity {
         //checa pelas permissoes
         checkForPermissions(permissions);
 
+        //seleciona a toolbar da tela e define ela como action bar
         Toolbar toolbar = findViewById(R.id.tbMain);
         setSupportActionBar(toolbar);
 
+        //captura a action bar definida anteriormente
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //captura o diretorio de fotos, percorrer as fotos e adiciona o array
         File dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File[] files = dir.listFiles();
         for (int i = 0; i < files.length; i++) {
             photos.add(files[i].getAbsolutePath());
         }
 
+        //inicializa o main adapter e define o o adapter da recycle view como este adapter criado
         mainAdapter = new MainAdapter(MainActivity.this, photos);
         RecyclerView rvGalery = findViewById(R.id.rvGalery);
         rvGalery.setAdapter(mainAdapter);
 
+        //captura a largura de tela, calcula o numero de colunas, e cria um grid layout para ser usado no rvGalery
         float w = getResources().getDimension(R.dimen.itemWidth);
         int numberofColumns = Util.calculateNoOfColumns(MainActivity.this, w);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, numberofColumns);
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    //inicializa o menu da toolbar
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
@@ -86,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    //define que quando o icone de camera da toolbar for clicada a funcao dispatchTakePictureIntent e excutada
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.opCamera:
@@ -96,29 +103,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //inicia a photoActivity e passa o caminho de arquivo da foto
     public void startPhotoActivity(String photoPath){
         Intent i = new Intent(MainActivity.this, PhotoActivity.class);
         i.putExtra("photo_path", photoPath);
         startActivity(i);
     }
 
+
     private void dispatchTakePictureIntent(){
         File f = null;
+        //tenta criar um arquivo de imagem
         try{
             f = createImageFile();
         }
+        //caso falhe na criacao do arquivo gera uma mensagem de erro
         catch(IOException e){
             Toast.makeText(MainActivity.this, "Não foi possível criar o arquivo", Toast.LENGTH_LONG).show();
             return;
         }
 
+        //define o caminho de foto da variavel como o caminho da imagem criada
         currentPhotoPath = f.getAbsolutePath();
 
+        //se a file foi criada executa os comandos abaixo
         if(f != null){
+            //gera um uri para um arquivo dado
             Uri fUri = FileProvider.getUriForFile(MainActivity.this, "brunetti.depaula.galeria.fileprovider", f);
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        i.putExtra(MediaStore.EXTRA_OUTPUT, fUri);
-        startActivityForResult(i, RESULT_TAKE_PICTURE);
+            Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            i.putExtra(MediaStore.EXTRA_OUTPUT, fUri);
+            startActivityForResult(i, RESULT_TAKE_PICTURE);
         }
     }
 
