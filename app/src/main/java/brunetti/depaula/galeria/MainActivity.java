@@ -138,21 +138,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private File createImageFile() throws IOException {
+        //captura o momento que a foto foi tirada
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        //adiciona jpeg_ a string gerada pela captura do momento que a foto foi tirada
         String imageFileName = "JPEG_" + timeStamp;
-    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-    File f = File.createTempFile(imageFileName, ".jpg", storageDir);
-    return f;
+        //acesse o diretorio de imagens
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        //cria um arquivo jpg no diretorio de imagens com o nome definido
+        File f = File.createTempFile(imageFileName, ".jpg", storageDir);
+        return f;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        //se a foto for tirada adiciona a foto no array photos e notifica o main adapter de que uma nova foto foi inserida foi inserida
         if(requestCode == RESULT_TAKE_PICTURE){
             if(resultCode == Activity.RESULT_OK){
                 photos.add(currentPhotoPath);
                 mainAdapter.notifyItemInserted(photos.size()-1);
             }
+            //caso a foto nao seja tirada deleta o arquivo f
             else{
                 File f = new File(currentPhotoPath);
                 f.delete();
@@ -163,19 +169,23 @@ public class MainActivity extends AppCompatActivity {
     private void checkForPermissions(List<String> permissions){
         List<String> permissionsNotGranted = new ArrayList<>();
 
+        //percorre o array de strings, se houver alguma permissao nao concedida, adiciona a mesma no array permissionsNotGranted
         for(String permission : permissions){
             if(!hasPermission(permission)){
                 permissionsNotGranted.add(permission);
             }
         }
 
+        //checa se a versao de desenvolvedor e maior ou igual a versao marshmallow
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            //se houve permissoes nao concedidas, faz a requisicao da permissao
             if(permissionsNotGranted.size() > 0){
             requestPermissions(permissionsNotGranted.toArray(new String[permissionsNotGranted.size()]), RESULT_REQUEST_PERMISSION);
             }
         }
     }
 
+    //checa se o aplicativo possui uma permissao
     private boolean hasPermission(String permission){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             return ActivityCompat.checkSelfPermission(MainActivity.this, permission) == PackageManager.PERMISSION_GRANTED;
@@ -187,7 +197,9 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+
         final List<String> permissionRejected = new ArrayList<>();
+        //checa se o aplicativo possui uma permissao, se nao houver adiciona no array permissionRejected
         if(requestCode == RESULT_REQUEST_PERMISSION){
             for(String permission : permissions){
                 if(!hasPermission(permission)){
@@ -196,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //se houver permissoes nao concediadas, mostra um alerta na tela que avisa o usuario que a permissao pedida e necessaria para o aplicativo funcionar
+        //tambem mostra um botao que ao ser clicado faz a requisicao das permissoes de novo
         if(permissionRejected.size() > 0){
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 if(shouldShowRequestPermissionRationale(permissionRejected.get(0))){
