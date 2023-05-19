@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         if(f != null){
             //gera um uri para um arquivo dado
             Uri fUri = FileProvider.getUriForFile(MainActivity.this, "brunetti.depaula.galeria.fileprovider", f);
+            //inicia uma intent para capturar uma imagem
             Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             i.putExtra(MediaStore.EXTRA_OUTPUT, fUri);
             startActivityForResult(i, RESULT_TAKE_PICTURE);
